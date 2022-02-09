@@ -201,6 +201,7 @@ set(SOURCES
     HTML/TagNames.cpp
     HTML/TextMetrics.cpp
     HTML/WebSocket.cpp
+    HTML/Worker.cpp
     HTML/WorkerGlobalScope.cpp
     HTML/WorkerLocation.cpp
     HighResolutionTime/Performance.cpp
@@ -500,6 +501,7 @@ libweb_js_wrapper(HTML/Storage)
 libweb_js_wrapper(HTML/SubmitEvent)
 libweb_js_wrapper(HTML/TextMetrics)
 libweb_js_wrapper(HTML/WebSocket)
+libweb_js_wrapper(HTML/Worker)
 libweb_js_wrapper(HTML/WorkerGlobalScope)
 libweb_js_wrapper(HTML/WorkerLocation)
 libweb_js_wrapper(HTML/WorkerNavigator)
