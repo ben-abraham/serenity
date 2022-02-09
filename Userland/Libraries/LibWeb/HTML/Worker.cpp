@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Andrew Kaster <akaster@serenityos.org>
+ * Copyright (c) 2022, Ben Abraham
  *
  * SPDX-License-Identifier: BSD-2-Clause
  */
