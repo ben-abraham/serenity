@@ -1069,7 +1069,7 @@ int main(int argc, char** argv)
 
     auto interface = IDL::parse_interface(path, data, import_base_path);
 
-    if (namespace_.is_one_of("Crypto", "CSS", "DOM", "Encoding", "HTML", "UIEvents", "Geometry", "HighResolutionTime", "IntersectionObserver", "NavigationTiming", "RequestIdleCallback", "ResizeObserver", "SVG", "Selection", "XHR", "URL")) {
+    if (namespace_.is_one_of("Audio", "Crypto", "CSS", "DOM", "Encoding", "HTML", "UIEvents", "Geometry", "HighResolutionTime", "IntersectionObserver", "NavigationTiming", "RequestIdleCallback", "ResizeObserver", "SVG", "Selection", "XHR", "URL")) {
         StringBuilder builder;
         builder.append(namespace_);
         builder.append("::");
@@ -2131,7 +2131,9 @@ static void generate_header(IDL::Interface const& interface)
 #include <LibWeb/Bindings/Wrapper.h>
 
 // FIXME: This is very strange.
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -2325,6 +2327,7 @@ void generate_implementation(IDL::Interface const& interface)
 #include <LibWeb/ResizeObserver/ResizeObserver.h>
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -3183,7 +3186,9 @@ void generate_constructor_implementation(IDL::Interface const& interface)
 #include <LibWeb/Bindings/NodeWrapper.h>
 #include <LibWeb/Bindings/NodeWrapperFactory.h>
 #include <LibWeb/Bindings/WindowObject.h>
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -3218,6 +3223,7 @@ void generate_constructor_implementation(IDL::Interface const& interface)
 #endif
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -3508,7 +3514,9 @@ void generate_prototype_implementation(IDL::Interface const& interface)
 #if __has_include(<LibWeb/Bindings/@prototype_base_class@.h>)
 #    include <LibWeb/Bindings/@prototype_base_class@.h>
 #endif
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -3546,7 +3554,11 @@ void generate_prototype_implementation(IDL::Interface const& interface)
 
     if (interface.pair_iterator_types.has_value()) {
         generator.append(R"~~~(
-#if __has_include(<LibWeb/CSS/@iterator_name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
+#    include <LibWeb/Crypto/@name@.h>
+#elif __has_include(<LibWeb/CSS/@iterator_name@.h>)
 #    include <LibWeb/CSS/@iterator_name@.h>
 #elif __has_include(<LibWeb/DOM/@iterator_name@.h>)
 #    include <LibWeb/DOM/@iterator_name@.h>
@@ -3581,6 +3593,7 @@ void generate_prototype_implementation(IDL::Interface const& interface)
     generator.append(R"~~~(
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::Crypto;
 using namespace Web::CSS;
 using namespace Web::DOM;
@@ -3964,7 +3977,9 @@ static void generate_iterator_header(IDL::Interface const& interface)
 #include <LibWeb/Bindings/Wrapper.h>
 
 // FIXME: This is very strange.
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -4051,6 +4066,7 @@ void generate_iterator_implementation(IDL::Interface const& interface)
 #include <LibWeb/Bindings/WindowObject.h>
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -4154,7 +4170,9 @@ void generate_iterator_prototype_implementation(IDL::Interface const& interface)
 #include <LibWeb/Bindings/ExceptionOrUtils.h>
 #include <LibWeb/Bindings/WindowObject.h>
 
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -4189,6 +4207,7 @@ void generate_iterator_prototype_implementation(IDL::Interface const& interface)
 #endif
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;

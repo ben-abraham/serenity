@@ -14,6 +14,7 @@ namespace Web::Audio {
 // https://webaudio.github.io/web-audio-api/#baseaudiocontext
 
 BaseAudioContext::BaseAudioContext()
+    : DOM::EventTarget()
 {
 }
 

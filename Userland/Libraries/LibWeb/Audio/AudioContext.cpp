@@ -5,6 +5,7 @@
  */
 
 #include <AK/String.h>
+#include <LibWeb/Bindings/AudioContextWrapper.h>
 #include <LibWeb/Audio/AudioContext.h>
 
 namespace Web::Audio {
@@ -17,9 +18,11 @@ AudioContext::AudioContext()//AudioContextOptions const& options)
 {
 }
 
+/*
 JS::Object* AudioContext::create_wrapper(JS::GlobalObject& global_object)
 {
     return wrap(global_object, *this);
 }
+*/
 
 }

@@ -33,13 +33,14 @@ public:
 
     virtual ~AudioContext() = default;
 
+    //virtual void ref_event_target() override { ref(); }
+    //virtual void unref_event_target() override { unref(); }
+    //virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
+
 protected:
     AudioContext();//AudioContextOptions const&
 
 private:
-    virtual void ref_event_target() override { ref(); }
-    virtual void unref_event_target() override { unref(); }
-    virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
     //AudioContextOptions m_options;
 };
 
