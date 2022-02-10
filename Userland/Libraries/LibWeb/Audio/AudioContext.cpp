@@ -12,17 +12,15 @@ namespace Web::Audio {
 
 // https://webaudio.github.io/web-audio-api/#AudioContext
 
-AudioContext::AudioContext()//AudioContextOptions const& options)
-    //: m_options(options)
+AudioContext::AudioContext(AudioContextOptions const& options)
 	: BaseAudioContext()
+    , m_options(options)
 {
 }
 
-/*
 JS::Object* AudioContext::create_wrapper(JS::GlobalObject& global_object)
 {
     return wrap(global_object, *this);
 }
-*/
 
 }

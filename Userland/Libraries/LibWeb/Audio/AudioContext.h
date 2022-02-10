@@ -12,36 +12,33 @@
 namespace Web::Audio {
 
 struct AudioContextOptions {
-    JS::Value latency_hint;
-    float sample_rate { -1 };
+    String latency_hint { "" };
+    AK::Optional<double> sample_rate { -1 };
 };
 
-// https://html.spec.whatwg.org/multipage/workers.html#dedicated-workers-and-the-worker-interface
+// https://webaudio.github.io/web-audio-api/#AudioContext
 class AudioContext final
     : public BaseAudioContext {
 public:
     using WrapperType = Bindings::AudioContextWrapper;
 
-    static NonnullRefPtr<Audio::AudioContext> create()//AudioContextOptions const& options
+    static NonnullRefPtr<Audio::AudioContext> create(AudioContextOptions const& options)
     {
-        return adopt_ref(*new Audio::AudioContext());//move(options)
+        return adopt_ref(*new Audio::AudioContext(move(options)));
     }
-    static NonnullRefPtr<Audio::AudioContext> create_with_global_object(Bindings::WindowObject&)//, AudioContextOptions const& options
+    static NonnullRefPtr<Audio::AudioContext> create_with_global_object(Bindings::WindowObject&, AudioContextOptions const& options)
     {
-        return Audio::AudioContext::create();//options
+        return Audio::AudioContext::create(options);
     }
 
     virtual ~AudioContext() = default;
-
-    //virtual void ref_event_target() override { ref(); }
-    //virtual void unref_event_target() override { unref(); }
-    //virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
+    virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
 
 protected:
-    AudioContext();//AudioContextOptions const&
+    AudioContext(AudioContextOptions const&);
 
 private:
-    //AudioContextOptions m_options;
+    AudioContextOptions m_options;
 };
 
 } // namespace Web::Audio

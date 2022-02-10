@@ -9,7 +9,6 @@
 #include <AK/RefCounted.h>
 #include <AK/URLParser.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/Bindings/BaseAudioContextWrapper.h>
 #include <LibWeb/Bindings/WindowObject.h>
 #include <LibWeb/Bindings/Wrappable.h>
 #include <LibWeb/DOM/Document.h>

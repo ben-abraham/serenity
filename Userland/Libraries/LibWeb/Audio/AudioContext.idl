@@ -1,7 +1,7 @@
 [Exposed=Window]
 interface AudioContext : BaseAudioContext {
 
-  constructor ();
+  constructor (optional AudioContextOptions contextOptions = {});
   
   //readonly attribute double baseLatency;
   //readonly attribute double outputLatency;
@@ -19,7 +19,7 @@ interface AudioContext : BaseAudioContext {
 
 };
 
-//dictionary AudioContextOptions {
-//  any latencyHint = "interactive";
-//  float sampleRate;
-//};
+dictionary AudioContextOptions {
+  USVString latencyHint = "interactive";
+  double sampleRate;
+};
