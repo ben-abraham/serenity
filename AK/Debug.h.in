@@ -470,6 +470,10 @@
 #cmakedefine01 WEBSERVER_DEBUG
 #endif
 
+#ifndef WEB_AUDIO_DEBUG
+#cmakedefine01 WEB_AUDIO_DEBUG
+#endif
+
 #ifndef WEB_WORKER_DEBUG
 #cmakedefine01 WEB_WORKER_DEBUG
 #endif

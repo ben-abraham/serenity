@@ -18,27 +18,27 @@
 namespace Web::Audio {
 
 // https://html.spec.whatwg.org/multipage/workers.html#dedicated-workers-and-the-worker-interface
-class BaseAudioContext
-    : public RefCounted<BaseAudioContext>
-    , public Weakable<BaseAudioContext>
+class MediaStream
+    : public RefCounted<MediaStream>
+    , public Weakable<MediaStream>
     , public DOM::EventTarget
     , public Bindings::Wrappable {
 public:
-    using WrapperType = Bindings::BaseAudioContextWrapper;
+    using WrapperType = Bindings::MediaStreamWrapper;
 
     using RefCounted::ref;
     using RefCounted::unref;
 
-    static NonnullRefPtr<Audio::BaseAudioContext> create()
+    static NonnullRefPtr<MediaStream> create(JS::Value src_stream)//MediaStream const* src_stream)
     {
-        return adopt_ref(*new Audio::BaseAudioContext());
+        return adopt_ref(*new Audio::MediaStream(src_stream));
     }
-    static NonnullRefPtr<Audio::BaseAudioContext> create_with_global_object(Bindings::WindowObject&)
+    static NonnullRefPtr<MediaStream> create_with_global_object(Bindings::WindowObject&, JS::Value src_stream)//MediaStream const* src_stream)
     {
-        return Audio::BaseAudioContext::create();
+        return Audio::MediaStream::create(src_stream);
     }
 
-    virtual ~BaseAudioContext() = default;
+    virtual ~MediaStream() = default;
 
     // ^EventTarget
     virtual void ref_event_target() override { ref(); }
@@ -46,8 +46,7 @@ public:
     virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
 
 protected:
-    BaseAudioContext();
-    Vector<JS::Promise> m_pending_resume_promises;
+    MediaStream(JS::Value);// const*);
 
 private:
 };
@@ -56,6 +55,6 @@ private:
 
 namespace Web::Bindings {
 
-BaseAudioContextWrapper* wrap(JS::GlobalObject&, Audio::BaseAudioContext&);
+MediaStreamWrapper* wrap(JS::GlobalObject&, Audio::MediaStream&);
 
 }

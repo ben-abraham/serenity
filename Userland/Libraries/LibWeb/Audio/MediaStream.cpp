@@ -6,20 +6,20 @@
 
 #include <AK/String.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/Bindings/BaseAudioContextWrapper.h>
-#include <LibWeb/Audio/BaseAudioContext.h>
+#include <LibWeb/Bindings/MediaStreamWrapper.h>
+#include <LibWeb/Audio/MediaStream.h>
 
 namespace Web::Audio {
 
 // https://webaudio.github.io/web-audio-api/#baseaudiocontext
 
-BaseAudioContext::BaseAudioContext()
+MediaStream::MediaStream(JS::Value)
     : DOM::EventTarget()
-    , m_pending_resume_promises()
 {
+    dbgln("Media Stream Create!");
 }
 
-JS::Object* BaseAudioContext::create_wrapper(JS::GlobalObject& global_object)
+JS::Object* MediaStream::create_wrapper(JS::GlobalObject& global_object)
 {
     return wrap(global_object, *this);
 }

@@ -1,6 +1,7 @@
 set(SOURCES
     Audio/AudioContext.cpp
     Audio/BaseAudioContext.cpp
+    Audio/MediaStream.cpp
     Bindings/CSSNamespace.cpp
     Bindings/CSSRuleWrapperFactory.cpp
     Bindings/CSSStyleDeclarationWrapperCustom.cpp
@@ -379,6 +380,7 @@ endfunction()
 
 libweb_js_wrapper(Audio/AudioContext)
 libweb_js_wrapper(Audio/BaseAudioContext)
+libweb_js_wrapper(Audio/MediaStream)
 libweb_js_wrapper(Crypto/Crypto)
 libweb_js_wrapper(Crypto/SubtleCrypto)
 libweb_js_wrapper(CSS/CSSRule)

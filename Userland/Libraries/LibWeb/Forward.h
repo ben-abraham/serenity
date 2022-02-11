@@ -11,6 +11,7 @@ namespace Web::Audio {
 class AudioContext;
 struct AudioContextOptions;
 class BaseAudioContext;
+class MediaStream;
 }
 
 namespace Web::Cookie {
@@ -434,6 +435,7 @@ class KeyboardEventWrapper;
 class LocationObject;
 class MediaQueryListEventWrapper;
 class MediaQueryListWrapper;
+class MediaStreamWrapper;
 class MessageChannelWrapper;
 class MessageEventWrapper;
 class MessagePortWrapper;

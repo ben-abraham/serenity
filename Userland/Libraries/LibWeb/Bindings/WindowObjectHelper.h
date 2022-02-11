@@ -225,6 +225,8 @@
 #include <LibWeb/Bindings/MediaQueryListEventConstructor.h>
 #include <LibWeb/Bindings/MediaQueryListEventPrototype.h>
 #include <LibWeb/Bindings/MediaQueryListPrototype.h>
+#include <LibWeb/Bindings/MediaStreamConstructor.h>
+#include <LibWeb/Bindings/MediaStreamPrototype.h>
 #include <LibWeb/Bindings/MessageChannelConstructor.h>
 #include <LibWeb/Bindings/MessageChannelPrototype.h>
 #include <LibWeb/Bindings/MessageEventConstructor.h>
@@ -418,6 +420,7 @@
     ADD_WINDOW_OBJECT_INTERFACE(KeyboardEvent)             \
     ADD_WINDOW_OBJECT_INTERFACE(MediaQueryList)            \
     ADD_WINDOW_OBJECT_INTERFACE(MediaQueryListEvent)       \
+    ADD_WINDOW_OBJECT_INTERFACE(MediaStream)               \
     ADD_WINDOW_OBJECT_INTERFACE(MessageChannel)            \
     ADD_WINDOW_OBJECT_INTERFACE(MessageEvent)              \
     ADD_WINDOW_OBJECT_INTERFACE(MouseEvent)                \

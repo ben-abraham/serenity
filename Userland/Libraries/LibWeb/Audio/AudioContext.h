@@ -8,6 +8,7 @@
 
 #include <LibWeb/Bindings/AudioContextWrapper.h>
 #include <LibWeb/Audio/BaseAudioContext.h>
+#include <LibWeb/DOM/ExceptionOr.h>
 
 namespace Web::Audio {
 
@@ -22,13 +23,10 @@ class AudioContext final
 public:
     using WrapperType = Bindings::AudioContextWrapper;
 
-    static NonnullRefPtr<Audio::AudioContext> create(AudioContextOptions const& options)
+    static DOM::ExceptionOr<NonnullRefPtr<Audio::AudioContext>> create(AudioContextOptions const& options);
+    static DOM::ExceptionOr<NonnullRefPtr<Audio::AudioContext>> create_with_global_object(Bindings::WindowObject&, AudioContextOptions const& options)
     {
-        return adopt_ref(*new Audio::AudioContext(move(options)));
-    }
-    static NonnullRefPtr<Audio::AudioContext> create_with_global_object(Bindings::WindowObject&, AudioContextOptions const& options)
-    {
-        return Audio::AudioContext::create(options);
+        return AudioContext::create(options);
     }
 
     virtual ~AudioContext() = default;
@@ -39,6 +37,8 @@ protected:
 
 private:
     AudioContextOptions m_options;
+    String m_control_thread_state;
+    String m_render_thread_state;
 };
 
 } // namespace Web::Audio
