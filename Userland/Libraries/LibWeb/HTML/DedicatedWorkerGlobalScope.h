@@ -17,8 +17,8 @@
 namespace Web::HTML {
 
 class DedicatedWorkerGlobalScope final
- : public WorkerGlobalScope
- , public Weakable<DedicatedWorkerGlobalScope> {
+    : public WorkerGlobalScope
+    , public Weakable<DedicatedWorkerGlobalScope> {
 public:
     using WrapperType = Bindings::DedicatedWorkerGlobalScopeWrapper;
 
@@ -29,7 +29,6 @@ public:
     //virtual JS::ThrowCompletionOr<JS::Value> internal_get(JS::PropertyKey const&, JS::Value receiver) const override;
     //virtual JS::ThrowCompletionOr<bool> internal_set(JS::PropertyKey const&, JS::Value value, JS::Value receiver) override;
     virtual void initialize_global_object() override;
-
 };
 
 } // namespace Web::HTML

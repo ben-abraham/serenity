@@ -20,12 +20,10 @@ namespace Web::HTML {
 DedicatedWorkerGlobalScope::DedicatedWorkerGlobalScope()
     : WorkerGlobalScope()
 {
-
 }
 
 DedicatedWorkerGlobalScope::~DedicatedWorkerGlobalScope()
 {
-
 }
 
 void DedicatedWorkerGlobalScope::initialize_global_object()

@@ -12,6 +12,7 @@
 #include <LibWeb/HTML/Scripting/Environments.h>
 #include <LibWeb/HTML/Worker.h>
 #include <LibWeb/HTML/WorkerDebugConsoleClient.h>
+#include <LibWeb/HTML/DedicatedWorkerGlobalScope.h>
 
 namespace Web::HTML {
 
@@ -155,6 +156,7 @@ void Worker::run_a_worker(AK::URL& url, EnvironmentSettingsObject& outside_setti
 
     // FIXME: This is because I don't know all the libraries well enough to properly setup the environment to spec
     // let alone making it a parallel implementation.
+
     m_execution_context.current_node = nullptr;
     m_execution_context.this_value = m_worker_scope;
     m_execution_context.function_name = "(global execution context)"sv;
@@ -264,6 +266,7 @@ void Worker::run_a_worker(AK::URL& url, EnvironmentSettingsObject& outside_setti
             outside_port.entangle_with(*inside_port);
 
             // 19. Create a new WorkerLocation object and associate it with worker global scope.
+            //outside_port.entangle_with(*m_implicit_port);
 
             // 20. Closing orphan workers: Start monitoring the worker such that no sooner than it
             //     stops being a protected worker, and no later than it stops being a permissible worker,
