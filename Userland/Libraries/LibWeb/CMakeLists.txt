@@ -112,6 +112,7 @@ set(SOURCES
     HTML/BrowsingContextContainer.cpp
     HTML/CanvasGradient.cpp
     HTML/CanvasRenderingContext2D.cpp
+    HTML/DedicatedWorkerGlobalScope.cpp
     HTML/DOMParser.cpp
     HTML/DOMStringMap.cpp
     HTML/EventLoop/EventLoop.cpp
@@ -447,6 +448,7 @@ libweb_js_wrapper(Geometry/DOMRectReadOnly)
 libweb_js_wrapper(HTML/CanvasGradient)
 libweb_js_wrapper(HTML/CanvasRenderingContext2D)
 libweb_js_wrapper(HTML/CloseEvent)
+libweb_js_wrapper(HTML/DedicatedWorkerGlobalScope)
 libweb_js_wrapper(HTML/DOMParser)
 libweb_js_wrapper(HTML/DOMStringMap)
 libweb_js_wrapper(HTML/ErrorEvent)

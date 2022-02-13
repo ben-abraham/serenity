@@ -9,6 +9,7 @@
 #include <AK/Optional.h>
 #include <AK/RefCounted.h>
 #include <AK/URL.h>
+#include <LibJS/Runtime/GlobalObject.h>
 #include <LibWeb/Bindings/Wrappable.h>
 #include <LibWeb/DOM/EventTarget.h>
 #include <LibWeb/DOM/ExceptionOr.h>
@@ -123,4 +124,4 @@ private:
     bool m_cross_origin_isolated_capability { false };
 };
 
-}
+} // namespace Web::HTML

@@ -114,6 +114,8 @@ void Worker::run_a_worker(AK::URL& url, EnvironmentSettingsObject& outside_setti
     // FIXME: Make and use subclasses of WorkerGlobalScope, however this requries JS::GlobalObject to
     //        play nicely with the IDL interpreter, to make spec-compliant extensions, which it currently does not.
     m_worker_scope = m_worker_vm->heap().allocate_without_global_object<JS::GlobalObject>();
+    
+    //m_worker_scope = static_cast<JS::GlobalObject*>(m_worker_vm->heap().allocate_without_global_object<DedicatedWorkerGlobalScope>());
     m_worker_scope->initialize_global_object();
 
     m_console = adopt_ref(*new WorkerDebugConsoleClient(m_worker_scope->console()));

@@ -150,4 +150,4 @@ DOM::ExceptionOr<String> WorkerGlobalScope::atob(String const& data) const
     return decoder->to_utf8(decoded_data.value());
 }
 
-}
+} // namespace Web::HTML

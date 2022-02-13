@@ -8,6 +8,7 @@
 
 #include <AK/RefCounted.h>
 #include <LibWeb/Bindings/Wrappable.h>
+#include <LibWeb/HTML/WorkerGlobalScope.h>
 #include <LibWeb/Forward.h>
 
 namespace Web::HTML {

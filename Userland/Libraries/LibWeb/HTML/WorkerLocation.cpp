@@ -5,6 +5,7 @@
  */
 
 #include <AK/String.h>
+#include <LibWeb/Bindings/WorkerLocationWrapper.h>
 #include <LibWeb/HTML/WorkerGlobalScope.h>
 #include <LibWeb/HTML/WorkerLocation.h>
 
