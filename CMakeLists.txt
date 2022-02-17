@@ -33,6 +33,7 @@ endif()
 set(CMAKE_INSTALL_MESSAGE NEVER)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(WEB_WORKER_DEBUG ON)
 
 if(NOT COMMAND serenity_option)
     macro(serenity_option)

@@ -8,15 +8,22 @@
 
 #include <AK/RefCounted.h>
 #include <AK/URLParser.h>
-#include <LibJS/Interpreter.h>
-#include <LibWeb/Bindings/MainThreadVM.h>
+#include <LibWeb/Bindings/EventTargetWrapper.h>
+#include <LibWeb/Bindings/WindowObject.h>
+#include <LibWeb/Bindings/WorkerWrapper.h>
+#include <LibWeb/Bindings/Wrappable.h>
+#include <LibWeb/DOM/Document.h>
+#include <LibWeb/DOM/EventTarget.h>
+#include <LibWeb/DOM/ExceptionOr.h>
+#include <LibWeb/DOM/Window.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/HTML/MessageEvent.h>
+#include <LibWeb/HTML/EventLoop/Task.h>
+#include <LibWeb/HTML/EventNames.h>
 #include <LibWeb/HTML/MessagePort.h>
 #include <LibWeb/HTML/Scripting/ClassicScript.h>
-#include <LibWeb/HTML/Scripting/WindowEnvironmentSettingsObject.h>
-#include <LibWeb/HTML/Scripting/WorkerEnvironmentSettingsObject.h>
-#include <LibWeb/HTML/WorkerDebugConsoleClient.h>
+#include <LibWeb/HTML/WorkerGlobalScope.h>
+#include <LibWeb/HTML/WorkerLocation.h>
+#include <LibWeb/Loader/LoadRequest.h>
 #include <LibWeb/Loader/ResourceLoader.h>
 
 #define ENUMERATE_WORKER_EVENT_HANDLERS(E)  \
@@ -26,9 +33,13 @@
 namespace Web::HTML {
 
 struct WorkerOptions {
-    String type { "classic" };
-    String credentials { "same-origin" };
+    String type { "" };
+    String credentials { "" };
     String name { "" };
+};
+
+struct StructuredSerializeOptions {
+    Vector<JS::Value> transfer = {};
 };
 
 // https://html.spec.whatwg.org/multipage/workers.html#dedicated-workers-and-the-worker-interface
@@ -43,15 +54,16 @@ public:
     using RefCounted::ref;
     using RefCounted::unref;
 
-    static DOM::ExceptionOr<NonnullRefPtr<Worker>> create(FlyString const& script_url, WorkerOptions const options, DOM::Document& document);
-    static DOM::ExceptionOr<NonnullRefPtr<Worker>> create_with_global_object(Bindings::WindowObject& window, FlyString const& script_url, WorkerOptions const options)
+    static DOM::ExceptionOr<NonnullRefPtr<Worker>> create(String& script_url, WorkerOptions const& options, DOM::Document* document);
+    static DOM::ExceptionOr<NonnullRefPtr<Worker>> create_with_global_object(Bindings::WindowObject& window, String& script_url, WorkerOptions const& options)
     {
-        return Worker::create(script_url, options, window.impl().associated_document());
+        return Worker::create(script_url, options, &window.impl().associated_document());
     }
 
     DOM::ExceptionOr<void> terminate();
 
-    void post_message(JS::Value message, JS::Value transfer);
+    DOM::ExceptionOr<void> post_message(JS::Value& message, NonnullRefPtrVector<JS::Value>& transfer);
+    DOM::ExceptionOr<void> post_message(JS::Value& message, StructuredSerializeOptions const& options);
 
     virtual ~Worker() = default;
 
@@ -59,9 +71,6 @@ public:
     virtual void ref_event_target() override { ref(); }
     virtual void unref_event_target() override { unref(); }
     virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
-
-    MessagePort* implicit_message_port() { return m_implicit_port; }
-    RefPtr<MessagePort> outside_message_port() { return m_outside_port; }
 
 #undef __ENUMERATE
 #define __ENUMERATE(attribute_name, event_name)                  \
@@ -71,32 +80,15 @@ public:
 #undef __ENUMERATE
 
 protected:
-    Worker(FlyString const&, const WorkerOptions, DOM::Document&);
+    Worker(String&, WorkerOptions const&, DOM::Document*);
+    Worker(String&, WorkerOptions const&);
 
 private:
-    static HTML::EventLoop& get_vm_event_loop(JS::VM& target_vm)
-    {
-        return static_cast<Bindings::WebEngineCustomData*>(target_vm.custom_data())->event_loop;
-    }
-
-    FlyString m_script_url;
+    String& m_script_url;
     WorkerOptions m_options;
-    WeakPtr<DOM::Document> m_document;
-    Bindings::WebEngineCustomData m_custom_data;
+    DOM::Document* m_document { nullptr };
 
-    NonnullRefPtr<JS::VM> m_worker_vm;
-    NonnullOwnPtr<JS::Interpreter> m_interpreter;
-    WeakPtr<WorkerEnvironmentSettingsObject> m_inner_settings;
-    JS::VM::InterpreterExecutionScope m_interpreter_scope;
-    JS::ExecutionContext m_execution_context;
-    WeakPtr<JS::Realm> m_worker_realm;
-    RefPtr<WorkerDebugConsoleClient> m_console;
-    JS::GlobalObject* m_worker_scope;
-
-    NonnullRefPtr<MessagePort> m_implicit_port;
-    RefPtr<MessagePort> m_outside_port;
-
-    void run_a_worker(AK::URL& url, EnvironmentSettingsObject& outside_settings, MessagePort& outside_port, WorkerOptions const options);
+    RefPtr<MessagePort> m_message_port;
 };
 
 } // namespace Web::HTML
