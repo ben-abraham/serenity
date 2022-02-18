@@ -5,6 +5,8 @@
  */
 
 #include <AK/String.h>
+#include <LibWeb/Forward.h>
+#include <LibWeb/Bindings/AudioContextWrapper.h>
 #include <LibWeb/Audio/AudioContext.h>
 
 namespace Web::Audio {

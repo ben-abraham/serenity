@@ -7,6 +7,11 @@
 
 #pragma once
 
+namespace Web::Audio {
+class AudioContext;
+class BaseAudioContext;
+}
+
 namespace Web::Cookie {
 struct Cookie;
 struct ParsedCookie;
@@ -335,7 +340,9 @@ class URLSearchParamsIterator;
 namespace Web::Bindings {
 class AbortControllerWrapper;
 class AbortSignalWrapper;
+class AudioContextWrapper;
 class AttributeWrapper;
+class BaseAudioContextWrapper;
 struct CallbackType;
 class CanvasGradientWrapper;
 class CanvasRenderingContext2DWrapper;

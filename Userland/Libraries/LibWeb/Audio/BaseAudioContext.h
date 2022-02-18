@@ -8,7 +8,6 @@
 
 #include <AK/RefCounted.h>
 #include <AK/URLParser.h>
-#include <LibWeb/Bindings/BaseAudioContextWrapper.h>
 #include <LibWeb/Bindings/WindowObject.h>
 #include <LibWeb/Bindings/Wrappable.h>
 #include <LibWeb/DOM/Document.h>
@@ -20,7 +19,7 @@ namespace Web::Audio {
 
 // https://html.spec.whatwg.org/multipage/workers.html#dedicated-workers-and-the-worker-interface
 class BaseAudioContext
-    : public RefCounted<Audio::BaseAudioContext>
+    : public RefCounted<BaseAudioContext>
     , public Weakable<BaseAudioContext>
     , public DOM::EventTarget
     , public Bindings::Wrappable {
@@ -30,13 +29,13 @@ public:
     using RefCounted::ref;
     using RefCounted::unref;
 
-    static NonnullRefPtr<Audio::BaseAudioContext> create()
+    static NonnullRefPtr<BaseAudioContext> create()
     {
-        return adopt_ref(*new Audio::BaseAudioContext());
+        return adopt_ref(*new BaseAudioContext());
     }
-    static NonnullRefPtr<Audio::BaseAudioContext> create_with_global_object(Bindings::WindowObject&)
+    static NonnullRefPtr<BaseAudioContext> create_with_global_object(Bindings::WindowObject&)
     {
-        return Audio::BaseAudioContext::create();
+        return BaseAudioContext::create();
     }
 
     virtual ~BaseAudioContext() = default;

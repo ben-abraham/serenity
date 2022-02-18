@@ -1540,6 +1540,7 @@ void generate_implementation(IDL::Interface const& interface)
 
     generator.append(R"~~~(
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -2398,7 +2399,9 @@ void generate_constructor_implementation(IDL::Interface const& interface)
 #include <LibWeb/Bindings/NodeWrapper.h>
 #include <LibWeb/Bindings/NodeWrapperFactory.h>
 #include <LibWeb/Bindings/WindowObject.h>
-#if __has_include(<LibWeb/Crypto/@name@.h>)
+#if __has_include(<LibWeb/Audio/@name@.h>)
+#    include <LibWeb/Audio/@name@.h>
+#elif __has_include(<LibWeb/Crypto/@name@.h>)
 #    include <LibWeb/Crypto/@name@.h>
 #elif __has_include(<LibWeb/CSS/@name@.h>)
 #    include <LibWeb/CSS/@name@.h>
@@ -2435,6 +2438,7 @@ void generate_constructor_implementation(IDL::Interface const& interface)
 #endif
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -2696,6 +2700,7 @@ void generate_prototype_implementation(IDL::Interface const& interface)
     generator.append(R"~~~(
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::Crypto;
 using namespace Web::CSS;
 using namespace Web::DOM;
@@ -3134,6 +3139,7 @@ void generate_iterator_implementation(IDL::Interface const& interface)
     generator.append(R"~~~(
 
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;
@@ -3246,6 +3252,7 @@ void generate_iterator_prototype_implementation(IDL::Interface const& interface)
 
     generator.append(R"~~~(
 // FIXME: This is a total hack until we can figure out the namespace for a given type somehow.
+using namespace Web::Audio;
 using namespace Web::CSS;
 using namespace Web::DOM;
 using namespace Web::Geometry;

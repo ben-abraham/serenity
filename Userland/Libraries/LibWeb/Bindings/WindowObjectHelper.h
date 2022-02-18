@@ -12,6 +12,10 @@
 #include <LibWeb/Bindings/AbortControllerPrototype.h>
 #include <LibWeb/Bindings/AbortSignalConstructor.h>
 #include <LibWeb/Bindings/AbortSignalPrototype.h>
+#include <LibWeb/Bindings/AudioContextConstructor.h>
+#include <LibWeb/Bindings/AudioContextPrototype.h>
+#include <LibWeb/Bindings/BaseAudioContextConstructor.h>
+#include <LibWeb/Bindings/BaseAudioContextPrototype.h>
 #include <LibWeb/Bindings/CSSRuleConstructor.h>
 #include <LibWeb/Bindings/CSSRuleListConstructor.h>
 #include <LibWeb/Bindings/CSSRuleListPrototype.h>
@@ -323,8 +327,10 @@
 
 #define ADD_WINDOW_OBJECT_INTERFACES                       \
     auto& vm = this->vm();                                 \
+    ADD_WINDOW_OBJECT_INTERFACE(AudioContext)              \
     ADD_WINDOW_OBJECT_INTERFACE(AbortController)           \
     ADD_WINDOW_OBJECT_INTERFACE(AbortSignal)               \
+    ADD_WINDOW_OBJECT_INTERFACE(BaseAudioContext)          \
     ADD_WINDOW_OBJECT_INTERFACE(Crypto)                    \
     ADD_WINDOW_OBJECT_INTERFACE(CSSRule)                   \
     ADD_WINDOW_OBJECT_INTERFACE(CSSRuleList)               \
