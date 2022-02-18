@@ -12,6 +12,7 @@
 #include <LibWeb/Bindings/AbortControllerPrototype.h>
 #include <LibWeb/Bindings/AbortSignalConstructor.h>
 #include <LibWeb/Bindings/AbortSignalPrototype.h>
+#include <LibWeb/Bindings/AudioConstructor.h>
 #include <LibWeb/Bindings/AudioContextConstructor.h>
 #include <LibWeb/Bindings/AudioContextPrototype.h>
 #include <LibWeb/Bindings/BaseAudioContextConstructor.h>
@@ -478,4 +479,5 @@
     ADD_WINDOW_OBJECT_INTERFACE(Worker)                    \
     ADD_WINDOW_OBJECT_INTERFACE(XMLHttpRequest)            \
     ADD_WINDOW_OBJECT_INTERFACE(XMLHttpRequestEventTarget) \
+    ADD_WINDOW_OBJECT_CONSTRUCTOR_AND_PROTOTYPE(Audio, AudioConstructor, HTMLAudioElementPrototype)  \
     ADD_WINDOW_OBJECT_CONSTRUCTOR_AND_PROTOTYPE(Image, ImageConstructor, HTMLImageElementPrototype)
