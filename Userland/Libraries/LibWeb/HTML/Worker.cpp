@@ -12,7 +12,7 @@
 #include <LibWeb/HTML/Scripting/Environments.h>
 #include <LibWeb/HTML/Worker.h>
 #include <LibWeb/HTML/WorkerDebugConsoleClient.h>
-#include <LibWeb/HTML/DedicatedWorkerGlobalScope.h>
+#include <LibWeb/Bindings/DedicatedWorkerGlobalScope.h>
 
 namespace Web::HTML {
 
@@ -114,7 +114,7 @@ void Worker::run_a_worker(AK::URL& url, EnvironmentSettingsObject& outside_setti
 
     // FIXME: Make and use subclasses of WorkerGlobalScope, however this requries JS::GlobalObject to
     //        play nicely with the IDL interpreter, to make spec-compliant extensions, which it currently does not.
-    m_worker_scope = m_worker_vm->heap().allocate_without_global_object<JS::GlobalObject>();
+    m_worker_scope = m_worker_vm->heap().allocate_without_global_object<Bindings::WorkerGlobalScope>();
     
     //m_worker_scope = static_cast<JS::GlobalObject*>(m_worker_vm->heap().allocate_without_global_object<DedicatedWorkerGlobalScope>());
     m_worker_scope->initialize_global_object();

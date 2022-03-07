@@ -4,6 +4,7 @@ set(SOURCES
     Bindings/CSSNamespace.cpp
     Bindings/CSSRuleWrapperFactory.cpp
     Bindings/CSSStyleDeclarationWrapperCustom.cpp
+    Bindings/DedicatedWorkerGlobalScope.cpp
     Bindings/EventListenerWrapper.cpp
     Bindings/EventTargetWrapperFactory.cpp
     Bindings/EventWrapperFactory.cpp
@@ -14,6 +15,7 @@ set(SOURCES
     Bindings/NavigatorObject.cpp
     Bindings/NodeWrapperFactory.cpp
     Bindings/WindowObject.cpp
+    Bindings/WorkerGlobalScope.cpp
     Bindings/Wrappable.cpp
     Crypto/Crypto.cpp
     Crypto/SubtleCrypto.cpp
@@ -112,7 +114,6 @@ set(SOURCES
     HTML/BrowsingContextContainer.cpp
     HTML/CanvasGradient.cpp
     HTML/CanvasRenderingContext2D.cpp
-    HTML/DedicatedWorkerGlobalScope.cpp
     HTML/DOMParser.cpp
     HTML/DOMStringMap.cpp
     HTML/EventLoop/EventLoop.cpp
@@ -216,7 +217,6 @@ set(SOURCES
     HTML/TextMetrics.cpp
     HTML/Worker.cpp
     HTML/WorkerDebugConsoleClient.cpp
-    HTML/WorkerGlobalScope.cpp
     HTML/WorkerLocation.cpp
     HighResolutionTime/Performance.cpp
     ImageDecoding.cpp
@@ -448,7 +448,6 @@ libweb_js_wrapper(Geometry/DOMRectReadOnly)
 libweb_js_wrapper(HTML/CanvasGradient)
 libweb_js_wrapper(HTML/CanvasRenderingContext2D)
 libweb_js_wrapper(HTML/CloseEvent)
-libweb_js_wrapper(HTML/DedicatedWorkerGlobalScope)
 libweb_js_wrapper(HTML/DOMParser)
 libweb_js_wrapper(HTML/DOMStringMap)
 libweb_js_wrapper(HTML/ErrorEvent)
@@ -534,7 +533,6 @@ libweb_js_wrapper(HTML/Storage)
 libweb_js_wrapper(HTML/SubmitEvent)
 libweb_js_wrapper(HTML/TextMetrics)
 libweb_js_wrapper(HTML/Worker)
-libweb_js_wrapper(HTML/WorkerGlobalScope)
 libweb_js_wrapper(HTML/WorkerLocation)
 libweb_js_wrapper(HTML/WorkerNavigator)
 libweb_js_wrapper(HighResolutionTime/Performance)

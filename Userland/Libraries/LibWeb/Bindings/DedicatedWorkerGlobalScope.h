@@ -12,15 +12,16 @@
 #include <LibJS/Runtime/Realm.h>
 #include <LibJS/Runtime/VM.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/HTML/WorkerGlobalScope.h>
+#include <LibWeb/Bindings/WorkerGlobalScope.h>
+#include <LibWeb/Bindings/DedicatedWorkerGlobalScope.h>
 
-namespace Web::HTML {
+namespace Web {
+namespace Bindings {
 
 class DedicatedWorkerGlobalScope final
     : public WorkerGlobalScope
     , public Weakable<DedicatedWorkerGlobalScope> {
 public:
-    using WrapperType = Bindings::DedicatedWorkerGlobalScopeWrapper;
 
     DedicatedWorkerGlobalScope();
     virtual ~DedicatedWorkerGlobalScope() override;
@@ -28,7 +29,7 @@ public:
     //virtual JS::ThrowCompletionOr<bool> internal_has_property(JS::PropertyKey const& name) const override;
     //virtual JS::ThrowCompletionOr<JS::Value> internal_get(JS::PropertyKey const&, JS::Value receiver) const override;
     //virtual JS::ThrowCompletionOr<bool> internal_set(JS::PropertyKey const&, JS::Value value, JS::Value receiver) override;
-    virtual void initialize_global_object() override;
 };
 
-} // namespace Web::HTML
+}
+}

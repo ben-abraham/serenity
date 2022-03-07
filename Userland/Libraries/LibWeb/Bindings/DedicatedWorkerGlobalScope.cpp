@@ -9,13 +9,12 @@
 #include <AK/Utf8View.h>
 #include <AK/Vector.h>
 #include <LibTextCodec/Decoder.h>
-#include <LibWeb/Bindings/DedicatedWorkerGlobalScopeWrapper.h>
-#include <LibWeb/Bindings/WorkerGlobalScopeWrapper.h>
 #include <LibWeb/DOM/DOMException.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/HTML/DedicatedWorkerGlobalScope.h>
+#include <LibWeb/Bindings/DedicatedWorkerGlobalScope.h>
 
-namespace Web::HTML {
+namespace Web {
+namespace Bindings {
 
 DedicatedWorkerGlobalScope::DedicatedWorkerGlobalScope()
     : WorkerGlobalScope()
@@ -26,9 +25,12 @@ DedicatedWorkerGlobalScope::~DedicatedWorkerGlobalScope()
 {
 }
 
+/*
 void DedicatedWorkerGlobalScope::initialize_global_object()
 {
     JS::GlobalObject::initialize_global_object();
 }
+*/
 
-} // namespace Web::HTML
+}
+}

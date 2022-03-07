@@ -7,11 +7,12 @@
 #pragma once
 
 #include <AK/RefCounted.h>
+#include <LibWeb/Bindings/WorkerGlobalScope.h>
 #include <LibWeb/Bindings/Wrappable.h>
 #include <LibWeb/Forward.h>
-#include <LibWeb/HTML/WorkerGlobalScope.h>
 
-namespace Web::HTML {
+namespace Web {
+namespace HTML {
 
 // https://html.spec.whatwg.org/multipage/workers.html#worker-locations
 class WorkerLocation
@@ -20,9 +21,16 @@ class WorkerLocation
 public:
     using WrapperType = Bindings::WorkerLocationWrapper;
 
-    static NonnullRefPtr<WorkerLocation> create(WorkerGlobalScope& global_scope)
+    WorkerLocation(Bindings::WorkerGlobalScope&);
+
+    static NonnullRefPtr<WorkerLocation> create(Bindings::WorkerGlobalScope& scope)
     {
-        return adopt_ref(*new WorkerLocation(global_scope));
+        return adopt_ref(*new WorkerLocation(scope));
+    }
+
+    static NonnullRefPtr<WorkerLocation> create_with_global_object(Bindings::WorkerGlobalScope& scope)
+    {
+        return WorkerLocation::create(scope);
     }
 
     String href() const;
@@ -36,9 +44,15 @@ public:
     String hash() const;
 
 private:
-    WorkerLocation(WorkerGlobalScope&);
 
-    WorkerGlobalScope& m_global_scope;
+    Bindings::WorkerGlobalScope& m_global_scope;
 };
 
+}
+
+namespace Bindings {
+
+WorkerLocationWrapper* wrap(JS::GlobalObject&, HTML::WorkerLocation&);
+
+}
 }

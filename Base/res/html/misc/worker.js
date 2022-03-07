@@ -6,5 +6,7 @@ onmessage = evt => {
 
 console.log("In Worker - Loaded", this);
 console.log("Keys: ", JSON.stringify(Object.keys(this)));
+console.log(location);
+console.log(navigator);
 
 postMessage("loaded");

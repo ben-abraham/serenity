@@ -14,6 +14,7 @@
 #include <LibWeb/DOM/EventTarget.h>
 #include <LibWeb/DOM/ExceptionOr.h>
 #include <LibWeb/Forward.h>
+#include <LibWeb/HTML/GlobalEventHandlers.h>
 #include <LibWeb/HTML/WorkerLocation.h>
 #include <LibWeb/HTML/WorkerNavigator.h>
 
@@ -25,27 +26,21 @@
     E(onrejectionhandled, HTML::EventNames::rejectionhandled) \
     E(onunhandledrejection, HTML::EventNames::unhandledrejection)
 
-namespace Web::HTML {
+namespace Web {
+namespace Bindings {
 
 // https://html.spec.whatwg.org/multipage/workers.html#the-workerglobalscope-common-interface
 // WorkerGlobalScope is the base class of each real WorkerGlobalScope that will be created when the
 // user agent runs the run a worker algorithm.
 class WorkerGlobalScope
-    : public RefCounted<WorkerGlobalScope>
-    , public DOM::EventTarget
-    , public Bindings::Wrappable {
+    : public JS::GlobalObject
+    , public RefCounted<WorkerGlobalScope>
+    , public Weakable<WorkerGlobalScope> {
+    JS_OBJECT(WorkerGlobalScope, JS::GlobalObject)
 public:
-    using WrapperType = Bindings::WorkerGlobalScopeWrapper;
-
-    using RefCounted::ref;
-    using RefCounted::unref;
-
+    explicit WorkerGlobalScope();
+    virtual void initialize_global_object() override;
     virtual ~WorkerGlobalScope() override;
-
-    // ^EventTarget
-    virtual void ref_event_target() override { ref(); }
-    virtual void unref_event_target() override { unref(); }
-    virtual JS::Object* create_wrapper(JS::GlobalObject&) override;
 
     // Following methods are from the WorkerGlobalScope IDL definition
     // https://html.spec.whatwg.org/multipage/workers.html#the-workerglobalscope-common-interface
@@ -53,16 +48,18 @@ public:
     // https://html.spec.whatwg.org/multipage/workers.html#dom-workerglobalscope-self
     NonnullRefPtr<WorkerGlobalScope const> self() const { return *this; }
 
-    NonnullRefPtr<WorkerLocation const> location() const;
-    NonnullRefPtr<WorkerNavigator const> navigator() const;
+    HTML::WorkerLocation& location() { return *m_location; };
+    HTML::WorkerNavigator& navigator() { return *m_navigator; };
     DOM::ExceptionOr<void> import_scripts(Vector<String> urls);
 
+/*
 #undef __ENUMERATE
 #define __ENUMERATE(attribute_name, event_name)                  \
     void set_##attribute_name(Optional<Bindings::CallbackType>); \
     Bindings::CallbackType* attribute_name();
     ENUMERATE_WORKER_GLOBAL_SCOPE_EVENT_HANDLERS(__ENUMERATE)
 #undef __ENUMERATE
+*/
 
     // Following methods are from the WindowOrWorkerGlobalScope mixin
     // https://html.spec.whatwg.org/multipage/webappapis.html#windoworworkerglobalscope-mixin
@@ -78,18 +75,45 @@ public:
     AK::URL const& url() const { return m_url.value(); }
     void set_url(AK::URL const& url) { m_url = url; }
 
-    // Spec note: While the WorkerLocation object is created after the WorkerGlobalScope object,
-    //            this is not problematic as it cannot be observed from script.
-    void set_location(NonnullRefPtr<WorkerLocation> loc) { m_location = move(loc); }
+    JS::Object* web_prototype(const String& class_name) { return m_prototypes.get(class_name).value_or(nullptr); }
+    JS::NativeFunction* web_constructor(const String& class_name) { return m_constructors.get(class_name).value_or(nullptr); }
 
-protected:
-    explicit WorkerGlobalScope();
+    template<typename T>
+    JS::Object& ensure_web_prototype(const String& class_name)
+    {
+        auto it = m_prototypes.find(class_name);
+        if (it != m_prototypes.end())
+            return *it->value;
+        auto* prototype = heap().allocate<T>(*this, *this);
+        m_prototypes.set(class_name, prototype);
+        return *prototype;
+    }
+
+    template<typename T>
+    JS::NativeFunction& ensure_web_constructor(const String& class_name)
+    {
+        auto it = m_constructors.find(class_name);
+        if (it != m_constructors.end())
+            return *it->value;
+        auto* constructor = heap().allocate<T>(*this, *this);
+        m_constructors.set(class_name, constructor);
+        define_direct_property(class_name, JS::Value(constructor), JS::Attribute::Writable | JS::Attribute::Configurable);
+        return *constructor;
+    }
+
+    virtual JS::ThrowCompletionOr<bool> internal_set_prototype_of(JS::Object* prototype) override;
 
 private:
-    RefPtr<WorkerLocation> m_location;
+
+    void visit_edges(Visitor& visitor) override;
+
+    JS_DECLARE_NATIVE_FUNCTION(location_getter);
+    JS_DECLARE_NATIVE_FUNCTION(navigator_getter);
+
+    NonnullRefPtr<HTML::WorkerLocation> m_location;
 
     // FIXME: Implement WorkerNavigator according to the spec
-    NonnullRefPtr<WorkerNavigator> m_navigator;
+    NonnullRefPtr<HTML::WorkerNavigator> m_navigator;
 
     // FIXME: Add all these internal slots
 
@@ -122,6 +146,10 @@ private:
 
     // https://html.spec.whatwg.org/multipage/workers.html#concept-workerglobalscope-cross-origin-isolated-capability
     bool m_cross_origin_isolated_capability { false };
+
+    HashMap<String, JS::Object*> m_prototypes;
+    HashMap<String, JS::NativeFunction*> m_constructors;
 };
 
-} // namespace Web::HTML
+}
+}

@@ -9,23 +9,106 @@
 #include <AK/Utf8View.h>
 #include <AK/Vector.h>
 #include <LibTextCodec/Decoder.h>
-#include <LibWeb/Bindings/WorkerGlobalScopeWrapper.h>
+#include <LibWeb/Bindings/CSSNamespace.h>
+#include <LibWeb/Bindings/CryptoWrapper.h>
+#include <LibWeb/Bindings/DocumentWrapper.h>
+#include <LibWeb/Bindings/ElementWrapper.h>
+#include <LibWeb/Bindings/EventTargetConstructor.h>
+#include <LibWeb/Bindings/EventTargetPrototype.h>
+#include <LibWeb/Bindings/EventWrapper.h>
+#include <LibWeb/Bindings/EventWrapperFactory.h>
+#include <LibWeb/Bindings/ExceptionOrUtils.h>
+#include <LibWeb/Bindings/HistoryWrapper.h>
+#include <LibWeb/Bindings/LocationObject.h>
+#include <LibWeb/Bindings/MediaQueryListWrapper.h>
+#include <LibWeb/Bindings/NavigatorObject.h>
+#include <LibWeb/Bindings/NodeWrapperFactory.h>
+#include <LibWeb/Bindings/PerformanceWrapper.h>
+#include <LibWeb/Bindings/Replaceable.h>
+#include <LibWeb/Bindings/ScreenWrapper.h>
+#include <LibWeb/Bindings/SelectionWrapper.h>
+#include <LibWeb/Bindings/StorageWrapper.h>
+#include <LibWeb/Bindings/WindowObject.h>
+#include <LibWeb/Bindings/WindowObjectHelper.h>
+#include <LibWeb/Bindings/WorkerGlobalScope.h>
+#include <LibWeb/Bindings/WorkerLocationWrapper.h>
+#include <LibWeb/Bindings/WorkerNavigatorWrapper.h>
 #include <LibWeb/DOM/DOMException.h>
 #include <LibWeb/Forward.h>
 #include <LibWeb/HTML/EventHandler.h>
 #include <LibWeb/HTML/EventNames.h>
-#include <LibWeb/HTML/WorkerGlobalScope.h>
 #include <LibWeb/HTML/WorkerLocation.h>
 #include <LibWeb/HTML/WorkerNavigator.h>
 
-namespace Web::HTML {
+namespace Web {
+namespace Bindings {
 
 WorkerGlobalScope::WorkerGlobalScope()
-    : m_navigator(make_ref_counted<WorkerNavigator>())
+    : m_location(HTML::WorkerLocation::create(*this))
+    , m_navigator(HTML::WorkerNavigator::create())
 {
 }
 
 WorkerGlobalScope::~WorkerGlobalScope() { }
+
+void WorkerGlobalScope::initialize_global_object()
+{
+    // FIXME: IDLify
+    Base::initialize_global_object();
+
+    Object::set_prototype(&ensure_web_prototype<EventTargetPrototype>("EventTarget"));
+
+    define_direct_property("self", this, JS::Attribute::Enumerable);
+    define_native_accessor("location", location_getter, {}, JS::Attribute::Enumerable);
+    define_native_accessor("navigator", navigator_getter, {}, JS::Attribute::Enumerable);
+    //undefined importScripts(USVString... urls);
+    
+    //// FIXME: Should be an OnErrorEventHandler
+    //attribute EventHandler onerror;
+    
+    //attribute EventHandler onlanguagechange;
+    //attribute EventHandler onoffline;
+    //attribute EventHandler ononline;
+    //attribute EventHandler onrejectionhandled;
+    //attribute EventHandler onunhandledrejection;
+    
+    //// FIXME: These should all come from a WindowOrWorkerGlobalScope mixin
+    //[Replaceable] readonly attribute USVString origin;
+    //readonly attribute boolean isSecureContext;
+    //readonly attribute boolean crossOriginIsolated;
+    
+    //// base64 utility methods
+    //DOMString btoa(DOMString data);
+    //ByteString atob(DOMString data);
+}
+
+void WorkerGlobalScope::visit_edges(Visitor& visitor)
+{
+    GlobalObject::visit_edges(visitor);
+    for (auto& it : m_prototypes)
+        visitor.visit(it.value);
+    for (auto& it : m_constructors)
+        visitor.visit(it.value);
+}
+
+static JS::ThrowCompletionOr<WorkerGlobalScope*> impl_from(JS::VM& vm, JS::GlobalObject& global_object)
+{
+    // Since this is a non built-in function we must treat it as non-strict mode
+    // this means that a nullish this_value should be converted to the
+    // global_object. Generally this does not matter as we try to convert the
+    // this_value to a specific object type in the bindings. But since window is
+    // the global object we make an exception here.
+    // This allows calls like `setTimeout(f, 10)` to work.
+    auto this_value = vm.this_value(global_object);
+    if (this_value.is_nullish())
+        this_value = &global_object;
+
+    auto* this_object = MUST(this_value.to_object(global_object));
+
+    if (StringView("WorkerGlobalScope") != this_object->class_name())
+        return vm.throw_completion<JS::TypeError>(global_object, JS::ErrorType::NotAnObjectOfType, "WorkerGlobalScope");
+    return static_cast<WorkerGlobalScope*>(this_object);
+}
 
 // https://html.spec.whatwg.org/multipage/workers.html#importing-scripts-and-libraries
 DOM::ExceptionOr<void> WorkerGlobalScope::import_scripts(Vector<String> urls)
@@ -54,26 +137,26 @@ DOM::ExceptionOr<void> WorkerGlobalScope::import_scripts(Vector<String> urls)
     return {};
 }
 
-JS::Object* WorkerGlobalScope::create_wrapper(JS::GlobalObject& global_object)
-{
-    return wrap(global_object, *this);
-}
 
 // https://html.spec.whatwg.org/multipage/workers.html#dom-workerglobalscope-location
-NonnullRefPtr<WorkerLocation const> WorkerGlobalScope::location() const
+JS_DEFINE_NATIVE_FUNCTION(WorkerGlobalScope::location_getter)
 {
+    auto* impl = MUST(impl_from(vm, global_object));
     // The location attribute must return the WorkerLocation object whose associated WorkerGlobalScope object is the WorkerGlobalScope object.
-    return *m_location;
+    return wrap(*impl, impl->location());
 }
 
-// https://html.spec.whatwg.org/multipage/workers.html#dom-worker-navigator
-NonnullRefPtr<WorkerNavigator const> WorkerGlobalScope::navigator() const
+
+// https://html.spec.whatwg.org/multipage/workers.html#dom-workerglobalscope-location
+JS_DEFINE_NATIVE_FUNCTION(WorkerGlobalScope::navigator_getter)
 {
-    // The navigator attribute of the WorkerGlobalScope interface must return an instance of the WorkerNavigator interface,
-    // which represents the identity and state of the user agent (the client).
-    return *m_navigator;
+    auto* impl = MUST(impl_from(vm, global_object));
+    // The location attribute must return the WorkerLocation object whose associated WorkerGlobalScope object is the WorkerGlobalScope object.
+    return wrap(*impl, impl->navigator());
 }
 
+
+/*
 #undef __ENUMERATE
 #define __ENUMERATE(attribute_name, event_name)                                          \
     void WorkerGlobalScope::set_##attribute_name(Optional<Bindings::CallbackType> value) \
@@ -86,6 +169,7 @@ NonnullRefPtr<WorkerNavigator const> WorkerGlobalScope::navigator() const
     }
 ENUMERATE_WORKER_GLOBAL_SCOPE_EVENT_HANDLERS(__ENUMERATE)
 #undef __ENUMERATE
+*/
 
 // https://html.spec.whatwg.org/multipage/webappapis.html#dom-origin
 String WorkerGlobalScope::origin() const
@@ -150,4 +234,12 @@ DOM::ExceptionOr<String> WorkerGlobalScope::atob(String const& data) const
     return decoder->to_utf8(decoded_data.value());
 }
 
-} // namespace Web::HTML
+// https://webidl.spec.whatwg.org/#platform-object-setprototypeof
+JS::ThrowCompletionOr<bool> WorkerGlobalScope::internal_set_prototype_of(JS::Object* prototype)
+{
+    // 1. Return ? SetImmutablePrototype(O, V).
+    return set_immutable_prototype(prototype);
+}
+
+}
+}

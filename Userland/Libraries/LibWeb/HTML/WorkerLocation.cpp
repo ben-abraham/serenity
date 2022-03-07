@@ -6,7 +6,7 @@
 
 #include <AK/String.h>
 #include <LibWeb/Bindings/WorkerLocationWrapper.h>
-#include <LibWeb/HTML/WorkerGlobalScope.h>
+#include <LibWeb/Bindings/WorkerGlobalScope.h>
 #include <LibWeb/HTML/WorkerLocation.h>
 
 namespace Web::HTML {
@@ -117,7 +117,7 @@ String WorkerLocation::hash() const
     return String::formatted("#{}", fragment);
 }
 
-WorkerLocation::WorkerLocation(WorkerGlobalScope& global_scope)
+WorkerLocation::WorkerLocation(Bindings::WorkerGlobalScope& global_scope)
     : m_global_scope(global_scope)
 {
 }
